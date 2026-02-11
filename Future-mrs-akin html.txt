@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Mrs. Akin 👑</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: 'Georgia', serif;
+    background: linear-gradient(to right, #1e1e2f, #3a0ca3);
+    color: white;
+    overflow: hidden;
+}
+
+.container {
+    margin-top: 120px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+h1 {
+    font-size: 3em;
+    color: gold;
+}
+
+h2 {
+    font-weight: normal;
+}
+
+button {
+    padding: 15px 45px;
+    font-size: 20px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    margin: 20px;
+    transition: 0.3s;
+}
+
+#yesBtn {
+    background: gold;
+    color: black;
+}
+
+#yesBtn:hover {
+    transform: scale(1.1);
+}
+
+#noBtn {
+    background: #888;
+    color: white;
+}
+
+#finalScreen {
+    display: none;
+    margin-top: 100px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.heart {
+    position: fixed;
+    color: gold;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-800px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="proposal">
+    <h1>Henrietta 👑</h1>
+    <h2>Will you be my Valentine… and my forever? 💍</h2>
+
+    <button id="yesBtn" onclick="acceptLove()">Yes 💖</button>
+    <button id="noBtn" onmouseover="vanishNo()">No 😢</button>
+</div>
+
+<div id="finalScreen">
+    <h1>✨ Future Mrs. Akin ✨</h1>
+    <h2>Loading… 100% ❤️💍</h2>
+</div>
+
+<script>
+
+function vanishNo() {
+    document.getElementById("noBtn").style.display = "none";
+}
+
+function acceptLove() {
+    document.getElementById("proposal").style.display = "none";
+    document.getElementById("finalScreen").style.display = "block";
+    heartExplosion();
+
+    let phoneNumber = "234XXXXXXXXXX"; // Replace with your number
+    let message = "Akin 💍 I just said YES to forever ❤️👑";
+    let url = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
+
+    setTimeout(function() {
+        window.open(url, "_blank");
+    }, 4000);
+}
+
+function heartExplosion() {
+    setInterval(function() {
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.bottom = "0px";
+        heart.style.fontSize = (Math.random() * 40 + 20) + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(function() {
+            heart.remove();
+        }, 5000);
+    }, 150);
+}
+
+</script>
+
+</body>
+</html>
