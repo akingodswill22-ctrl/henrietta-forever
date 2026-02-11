@@ -1,134 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Future Mrs. Akin 👑</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Be My Valentine?</title>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+   <!-- EmailJS SDK -->
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+   <style>
+       /* Reset and Base Styles */
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
 
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    font-family: 'Georgia', serif;
-    background: linear-gradient(to right, #1e1e2f, #3a0ca3);
-    color: white;
-    overflow: hidden;
-}
+       body {
+           font-family: 'Outfit', sans-serif;
+           color: #fff;
+           min-height: 100vh;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           overflow: hidden;
+           /* Prevent scrollbar when hearts float */
+           background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 25%, #fca7a7 50%, #fc6767 75%, #ec008c 100%);
+           background-size: 400% 400%;
+           animation: gradientBG 15s ease infinite;
+       }
 
-.container {
-    margin-top: 120px;
-    animation: fadeIn 2s ease-in-out;
-}
+       @keyframes gradientBG {
+           0% {
+               background-position: 0% 50%;
+           }
 
-h1 {
-    font-size: 3em;
-    color: gold;
-}
+           50% {
+               background-position: 100% 50%;
+           }
 
-h2 {
-    font-weight: normal;
-}
+           100% {
+               background-position: 0% 50%;
+           }
+       }
 
-button {
-    padding: 15px 45px;
-    font-size: 20px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    margin: 20px;
-    transition: 0.3s;
-}
+       /* Floating Hearts Background */
+       .heart-bg {
+           position: absolute;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           pointer-events: none;
+           z-index: 0;
+           overflow: hidden;
+       }
 
-#yesBtn {
-    background: gold;
-    color: black;
-}
+       .heart {
+           position: absolute;
+           bottom: -100px;
+           font-size: 2rem;
+           animation: floatUp linear infinite;
+           opacity: 0.6;
+           color: #fff;
+       }
 
-#yesBtn:hover {
-    transform: scale(1.1);
-}
+       @keyframes floatUp {
+           0% {
+               transform: translateY(0) rotate(0deg);
+               opacity: 0.8;
+           }
 
-#noBtn {
-    background: #888;
-    color: white;
-}
+           100% {
+               transform: translateY(-110vh) rotate(360deg);
+               opacity: 0;
+           }
+       }
 
-#finalScreen {
-    display: none;
-    margin-top: 100px;
-    animation: fadeIn 2s ease-in-out;
-}
+       /* Glassmorphism Card */
+       .container {
+           padding: 20px;
+           z-index: 10;
+           width: 100%;
+           max-width: 500px;
+       }
 
-.heart {
-    position: fixed;
-    color: gold;
-    animation: float 5s linear infinite;
-}
+       .card {
+           background: rgba(255, 255, 255, 0.25);
+           backdrop-filter: blur(15px);
+           -webkit-backdrop-filter: blur(15px);
+           border: 1px solid rgba(255, 255, 255, 0.4);
+           border-radius: 20px;
+           padding: 3rem 2rem;
+           text-align: center;
+           box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+           transition: transform 0.3s ease;
+       }
 
-@keyframes float {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-800px); opacity: 0; }
-}
+       .card:hover {
+           transform: translateY(-5px);
+       }
 
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-</style>
+       h1 {
+           font-size: 3rem;
+           margin-bottom: 1rem;
+           color: #fff;
+           text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+       }
+
+       p {
+           font-size: 1.5rem;
+           margin-bottom: 2.5rem;
+           opacity: 0.9;
+       }
+
+       /* Buttons */
+       .buttons {
+           display: flex;
+           justify-content: center;
+           gap: 20px;
+           flex-wrap: wrap;
+           position: relative;
+           /* Added min-height so content doesn't jump immediately */
+           min-height: 60px;
+       }
+
+       .btn {
+           padding: 15px 30px;
+           font-size: 1.2rem;
+           border: none;
+           border-radius: 50px;
+           cursor: pointer;
+           transition: all 0.3s ease;
+           font-weight: 500;
+           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+           font-family: 'Outfit', sans-serif;
+       }
+
+       .yes-btn {
+           background: linear-gradient(45deg, #11998e, #38ef7d);
+           color: white;
+       }
+
+       .yes-btn:hover {
+           background: linear-gradient(45deg, #38ef7d, #11998e);
+           transform: scale(1.05);
+           box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+       }
+
+       .no-btn {
+           background: linear-gradient(45deg, #FF416C, #FF4B2B);
+           color: white;
+           position: relative;
+           /* Changed from absolute to relative initially */
+           z-index: 20;
+       }
+
+       /* Modal Styling */
+       .modal {
+           display: none;
+           /* Hidden by default */
+           position: fixed;
+           z-index: 100;
+           left: 0;
+           top: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, 0.6);
+           justify-content: center;
+           align-items: center;
+       }
+
+       .modal-content {
+           background: #fff;
+           color: #333;
+           padding: 2rem;
+           border-radius: 15px;
+           text-align: center;
+           max-width: 400px;
+           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+           border-top: 5px solid #FF4B2B;
+       }
+
+       .modal.visible {
+           display: flex;
+           animation: fadeIn 0.3s;
+       }
+
+       @keyframes fadeIn {
+           from {
+               opacity: 0;
+           }
+
+           to {
+               opacity: 1;
+           }
+       }
+
+       .modal-content p {
+           font-size: 1.2rem;
+           margin-bottom: 1.5rem;
+           color: #333;
+       }
+
+       .modal-buttons {
+           display: flex;
+           justify-content: center;
+           gap: 15px;
+       }
+
+       .modal-btn {
+           background: #eee;
+           color: #333;
+           font-size: 1rem;
+           padding: 10px 20px;
+       }
+
+       .modal-btn.primary {
+           background: #38ef7d;
+           /* Matches yes button somewhat */
+           color: #fff;
+       }
+
+       /* Helper Class */
+       .hidden {
+           display: none !important;
+       }
+
+       /* Specific styling for when no button goes crazy */
+       .btn.running {
+           position: fixed;
+           /* Takes it out of flow */
+           transition: top 0.2s ease, left 0.2s ease;
+           /* Smooth movement */
+       }
+   </style>
 </head>
+
 <body>
+   <div class="heart-bg"></div>
+   <div class="container">
+       <div class="card">
+           <h1>I Love You â¤ï¸</h1>
+           <p>Will you be my Valentine?</p>
+           <div class="buttons">
+               <button id="yesBtn" class="btn yes-btn">Yes! Of course!</button>
+               <button id="noBtn" class="btn no-btn">No</button>
+           </div>
+           <div id="message" class="hidden">
+               Yay! I'm the happiest person alive! ðŸŽ‰ check your email/DM!
+           </div>
+       </div>
+   </div>
 
-<div class="container" id="proposal">
-    <h1>Henrietta 👑</h1>
-    <h2>Will you be my Valentine… and my forever? 💍</h2>
+   <!-- Modal for "Are you sure?" -->
+   <div id="modal" class="modal hidden">
+       <div class="modal-content">
+           <p>Are you really sure you want to say no? ðŸ˜¢</p>
+           <div class="modal-buttons">
+               <button id="confirmNo" class="btn modal-btn">Yes, I'm sure</button>
+               <button id="cancelNo" class="btn modal-btn primary">Wait, maybe Yes</button>
+           </div>
+       </div>
+   </div>
 
-    <button id="yesBtn" onclick="acceptLove()">Yes 💖</button>
-    <button id="noBtn" onmouseover="vanishNo()">No 😢</button>
-</div>
+   <!-- Audio Element -->
+   <!-- REPLACE 'wizkid_asake_song.mp3' with your actual mp3 file name! -->
+   <audio id="loveSong" src="wizkid_asake_song.mp3" loop></audio>
 
-<div id="finalScreen">
-    <h1>✨ Future Mrs. Akin ✨</h1>
-    <h2>Loading… 100% ❤️💍</h2>
-</div>
+   <script>
+       // Configuration
+       // !IMPORTANT: Replace these with your actual EmailJS IDs!
+       const PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // From https://dashboard.emailjs.com/admin/account
+       const SERVICE_ID = "YOUR_SERVICE_ID";
+       const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
 
-<script>
+       const NO_BUTTON_ESCAPE_COUNT = 5;
 
-function vanishNo() {
-    document.getElementById("noBtn").style.display = "none";
-}
+       // Initialize EmailJS
+       (function () {
+           emailjs.init(PUBLIC_KEY);
+       })();
 
-function acceptLove() {
-    document.getElementById("proposal").style.display = "none";
-    document.getElementById("finalScreen").style.display = "block";
-    heartExplosion();
+       // State
+       let escapeCount = 0;
 
-    let phoneNumber = "234XXXXXXXXXX"; // Replace with your number
-    let message = "Akin 💍 I just said YES to forever ❤️👑";
-    let url = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(message);
+       // DOM Elements
+       const yesBtn = document.getElementById('yesBtn');
+       const noBtn = document.getElementById('noBtn');
+       const modal = document.getElementById('modal');
+       const confirmNoBtn = document.getElementById('confirmNo');
+       const cancelNoBtn = document.getElementById('cancelNo');
+       const card = document.querySelector('.card');
+       const messageDiv = document.getElementById('message');
+       const buttonsDiv = document.querySelector('.buttons');
+       const loveSong = document.getElementById('loveSong');
 
-    setTimeout(function() {
-        window.open(url, "_blank");
-    }, 4000);
-}
+       // Add Floating Hearts Background
+       function createHearts() {
+           const heartContainer = document.querySelector('.heart-bg');
+           const emojis = ['â¤ï¸', 'ðŸ’–', 'ðŸ’', 'ðŸ’•', 'ðŸ’—', 'ðŸ’˜'];
 
-function heartExplosion() {
-    setInterval(function() {
-        let heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "💖";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.bottom = "0px";
-        heart.style.fontSize = (Math.random() * 40 + 20) + "px";
-        document.body.appendChild(heart);
+           for (let i = 0; i < 50; i++) {
+               const heart = document.createElement('div');
+               heart.classList.add('heart');
+               heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+               heart.style.left = Math.random() * 100 + 'vw';
+               heart.style.animationDuration = Math.random() * 3 + 4 + 's'; // 4-7s
+               heart.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+               heartContainer.appendChild(heart);
 
-        setTimeout(function() {
-            heart.remove();
-        }, 5000);
-    }, 150);
-}
+               heart.style.animationDelay = Math.random() * 5 + 's';
+           }
+       }
 
-</script>
+       createHearts();
 
+       // No Button Logic
+       function moveNoButton() {
+           if (escapeCount >= NO_BUTTON_ESCAPE_COUNT) {
+               // Stop moving, allow click
+               return;
+           }
+
+           const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40); // 20px padding
+           const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
+
+           noBtn.style.position = 'fixed'; // Make it break out of flow
+           noBtn.style.left = `${Math.max(20, x)}px`;
+           noBtn.style.top = `${Math.max(20, y)}px`;
+
+           // Add running class for smooth transition if needed
+           noBtn.classList.add('running');
+
+           escapeCount++;
+       }
+
+       // Event Listeners for No Button
+       noBtn.addEventListener('mouseover', moveNoButton);
+       noBtn.addEventListener('touchstart', (e) => {
+           if (escapeCount < NO_BUTTON_ESCAPE_COUNT) {
+               e.preventDefault(); // Stop click
+               moveNoButton();
+           }
+       });
+
+       noBtn.addEventListener('click', (e) => {
+           if (escapeCount < NO_BUTTON_ESCAPE_COUNT) {
+               e.preventDefault();
+               moveNoButton();
+           } else {
+               // Show Modal
+               modal.classList.add('visible');
+           }
+       });
+
+       // Modal Logic
+       cancelNoBtn.addEventListener('click', () => {
+           modal.classList.remove('visible');
+       });
+
+       confirmNoBtn.addEventListener('click', () => {
+           sendEmail('NO');
+           modal.classList.remove('visible');
+           // Update UI for rejection
+           card.innerHTML = '<h1>ðŸ’”</h1><p>Oh... okay. I understand.</p>';
+       });
+
+       // Yes Button Logic
+       yesBtn.addEventListener('click', () => {
+           sendEmail('YES');
+           // Celebration
+           confettiEffect();
+
+           // Play Music
+           loveSong.play().catch(e => {
+               console.log("Audio play failed (user interaction usually required first): ", e);
+           });
+
+           // Update UI
+           buttonsDiv.style.display = 'none';
+           messageDiv.classList.remove('hidden');
+           document.querySelector('h1').innerText = "YAY! â¤ï¸";
+           document.querySelector('p').innerText = "Best Day Ever!";
+       });
+
+
+       // Email Logic
+       function sendEmail(response) {
+           // Provide feedback that something is happening
+           console.log(`User said: ${response}`);
+
+           const templateParams = {
+               to_name: "My Valentine", // Your name or whoever receives it
+               from_name: "My Crush", // Or just generic
+               message: `She said ${response}!`,
+               reply_to: "no-reply@valentine.com"
+           };
+
+           emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+               .then(() => {
+                   console.log('EMAIL SENT SUCCESS!');
+               }, (error) => {
+                   console.log('EMAIL FAILED...', error);
+               });
+       }
+
+       // Simple celebration effect
+       function confettiEffect() {
+           // Increase heart speed and count
+           const hearts = document.querySelectorAll('.heart');
+           hearts.forEach(h => {
+               h.style.animationDuration = '2s';
+               h.style.color = '#ffeb3b'; // Make them gold/yellow
+           });
+       }
+   </script>
 </body>
+
 </html>
